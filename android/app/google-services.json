@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "90305683582",
+    "project_id": "chat-genie-436fd",
+    "storage_bucket": "chat-genie-436fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90305683582:android:828ae882c959a53598b82f",
+        "android_client_info": {
+          "package_name": "com.example.chat_genie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90305683582-iuqipto7uk1hm09mjnphgc78nkbh9ehm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_genie",
+            "certificate_hash": "4ac3a7a53f1647d4a791f5ef653281fc3bc26337"
+          }
+        },
+        {
+          "client_id": "90305683582-1qfpbb6c0r9f6gavvcfocqa0m6cv7jum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYFzP4Xt68hggeQTILD3fjI1X7wkI9gf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90305683582-1qfpbb6c0r9f6gavvcfocqa0m6cv7jum.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
