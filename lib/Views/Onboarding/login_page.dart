@@ -1,5 +1,5 @@
 import 'package:chat_genie/Views/home_page.dart';
-import 'package:chat_genie/Views/register_page.dart';
+import 'package:chat_genie/Views/Onboarding/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Colors.deepPurpleAccent,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -114,8 +114,8 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                           height: 200,
                           child: Image.asset(
-                            "assets/logo.png",
-                            fit: BoxFit.contain,
+                            "assets/images/logo.png",
+                            fit: BoxFit.fill,
                           )),
                       SizedBox(height: 45),
                       emailField,
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 "SignUp",
                                 style: TextStyle(
-                                    color: Colors.redAccent,
+                                    color: Colors.deepPurpleAccent,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15),
                               ),
