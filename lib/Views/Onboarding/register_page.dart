@@ -1,6 +1,6 @@
 import 'package:chat_genie/Model/user_model.dart';
 import 'package:chat_genie/Views/Onboarding/login_page.dart';
-import 'package:chat_genie/Views/home_page.dart';
+import 'package:chat_genie/Views/Screens/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

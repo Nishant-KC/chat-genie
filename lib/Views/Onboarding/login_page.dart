@@ -1,4 +1,4 @@
-import 'package:chat_genie/Views/home_page.dart';
+import 'package:chat_genie/Views/Screens/home_page.dart';
 import 'package:chat_genie/Views/Onboarding/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

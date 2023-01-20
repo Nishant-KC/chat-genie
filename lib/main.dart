@@ -1,4 +1,5 @@
 import 'package:chat_genie/Views/Onboarding/login_page.dart';
+import 'package:chat_genie/Views/Screens/home_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
         primaryColor: Colors.deepPurpleAccent,
       ),
-      home: const LoginPage(),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
