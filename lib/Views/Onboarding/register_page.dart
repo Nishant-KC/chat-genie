@@ -1,4 +1,5 @@
 import 'package:chat_genie/Model/user_model.dart';
+import 'package:chat_genie/Views/Onboarding/complete_profile.dart';
 import 'package:chat_genie/Views/Onboarding/login_page.dart';
 import 'package:chat_genie/Views/Screens/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final User firebaseUser;
+
+  const RegistrationPage({super.key, required this.userModel, required this.firebaseUser});
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -23,65 +27,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
   // our form key
   final _formKey = GlobalKey<FormState>();
   // editing Controller
-  final firstNameEditingController = new TextEditingController();
-  final secondNameEditingController = new TextEditingController();
   final emailEditingController = new TextEditingController();
   final passwordEditingController = new TextEditingController();
   final confirmPasswordEditingController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    //first name field
-    final firstNameField = TextFormField(
-        autofocus: false,
-        controller: firstNameEditingController,
-        keyboardType: TextInputType.name,
-        validator: (value) {
-          RegExp regex = new RegExp(r'^.{3,}$');
-          if (value!.isEmpty) {
-            return ("First Name cannot be Empty");
-          }
-          if (!regex.hasMatch(value)) {
-            return ("Enter Valid name(Min. 3 Character)");
-          }
-          return null;
-        },
-        onSaved: (value) {
-          firstNameEditingController.text = value!;
-        },
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_circle),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "First Name",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ));
-
-    //last name field
-    final lastName = TextFormField(
-        autofocus: false,
-        controller: secondNameEditingController,
-        keyboardType: TextInputType.name,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return ("Second Name cannot be Empty");
-          }
-          return null;
-        },
-        onSaved: (value) {
-          secondNameEditingController.text = value!;
-        },
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_circle),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Last Name",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ));
 
     //email field
     final emailField = TextFormField(
@@ -99,9 +50,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           }
           return null;
         },
-        onSaved: (value) {
-          firstNameEditingController.text = value!;
-        },
+
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.mail),
@@ -125,9 +74,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           if (!regex.hasMatch(value)) {
             return ("Enter Valid Password(Min. 6 Character)");
           }
-        },
-        onSaved: (value) {
-          firstNameEditingController.text = value!;
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
@@ -185,17 +131,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.red),
-          onPressed: () {
-            // passing this to our root
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
+
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -214,10 +150,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           "assets/images/logo.png",
                           fit: BoxFit.contain,
                         )),
-                    SizedBox(height: 45),
-                    firstNameField,
-                    SizedBox(height: 20),
-                    lastName,
                     SizedBox(height: 20),
                     emailField,
                     SizedBox(height: 20),
@@ -226,7 +158,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     confirmPasswordField,
                     SizedBox(height: 20),
                     signUpButton,
-                    SizedBox(height: 15),
+                    SizedBox(height: 20),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Already have an account? "),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          LoginPage(userModel: widget.userModel, firebaseUser: widget.firebaseUser,)));
+                            },
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                  color: Colors.deepPurpleAccent,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          )
+                        ])
                   ],
                 ),
               ),
@@ -237,6 +190,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
   void signUp(String email, String password) async {
+    UserCredential? credential;
     if (_formKey.currentState!.validate()) {
       try {
         await _auth
@@ -276,28 +230,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
-    // sedning these values
+    // sending these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    UserModel userModel = UserModel();
+    UserModel newUser = UserModel();
 
     // writing all the values
-    userModel.email = user!.email;
-    userModel.uid = user.uid;
-    userModel.firstName = firstNameEditingController.text;
-    userModel.secondName = secondNameEditingController.text;
+    newUser.email = user!.email;
+    newUser.uid = user.uid;
+    newUser.firstName = "";
+    newUser.secondName = "";
+
 
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
-        .set(userModel.toMap());
+        .set(newUser.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
 
     Navigator.pushAndRemoveUntil(
         (context),
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) {
+          return CompleteProfile(userModel: newUser, firebaseUser: user);
+        }),
             (route) => false);
   }
 }

@@ -7,7 +7,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final User firebaseUser;
+
+  const HomePage(
+      {super.key, required this.userModel, required this.firebaseUser});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     FirebaseFirestore.instance
         .collection("users")
-        .doc(user!.uid)
+        .doc(user?.uid)
         .get()
         .then((value) {
       this.loggedInUser = UserModel.fromMap(value.data());
@@ -35,21 +39,6 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-          // appBar: AppBar(
-          //   leading: Builder(
-          //     builder: (BuildContext context) {
-          //       return IconButton(
-          //         icon: const Icon(Icons.format_list_bulleted_rounded),
-          //         onPressed: () {
-          //           Scaffold.of(context).openDrawer();
-          //         },
-          //         tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-          //       );
-          //     },
-          //   ),
-          //   title: const Text("Welcome"),
-          //   centerTitle: true,
-          // ),
           appBar: AppBar(
             title: Text(
               'ChatApp',
@@ -93,7 +82,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ]),
           ),
-          drawer: MyDrawer(),
+          // drawer: MyDrawer(),
           body: Stack(children: [
             InkWell(
               onTap: () {

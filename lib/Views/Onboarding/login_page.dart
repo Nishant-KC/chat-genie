@@ -4,14 +4,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../Model/user_model.dart';
+
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final UserModel? userModel;
+  final User? firebaseUser;
+
+  const LoginPage({super.key, required this.userModel, required this.firebaseUser});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   // form key
   final _formKey = GlobalKey<FormState>();
   // editing controller
@@ -22,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   // string for displaying the error Message
   String? errorMessage;
   @override
+
   Widget build(BuildContext context) {
     //email field
     final emailField = TextFormField(
@@ -134,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            RegistrationPage()));
+                                            RegistrationPage(userModel: widget.userModel!, firebaseUser: widget.firebaseUser!)));
                               },
                               child: Text(
                                 "SignUp",
@@ -163,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
             .then((uid) => {
           Fluttertoast.showToast(msg: "Login Successful"),
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => HomePage())),
+              MaterialPageRoute(builder: (context) => HomePage(userModel: widget.userModel!, firebaseUser: widget.firebaseUser!))),
         });
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
